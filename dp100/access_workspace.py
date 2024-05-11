@@ -26,7 +26,29 @@ az_dataset = Dataset.get_by_name(ws,"Loan application using SDK")
 ds_list = list(ws.datasets.keys())
 
 for items in ds_list:
-    print(items)
+    print(items) 
 
+
+df = az_dataset.to_pandas_dataframe()
+
+df_sub = df[["Married","Gender","Loan_Status"]]
+
+az_ds_from_df = Dataset.Tabular.register_pandas_dataframe(
+                dataframe=df_sub,
+                target=az_default_store,
+                name="Loan Dataset from Dataframe"
+
+                )
+
+files_list = ["./data/test.csv","./data/test1.csv"]
+az_store.upload_files(files=files_list,
+                      target_path="Loan Data/",
+                      relative_root="./data/",
+                      overite=True)
+
+
+az_store.upload(src_dir="./data",
+                target_path="Loan Data/data",
+                overwrite=True)
 
 
