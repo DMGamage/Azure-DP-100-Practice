@@ -11,4 +11,13 @@ experiment = Experiment(workspace=ws,
 
 new_run = experiment.start_logging()
 
+df =  az_dataset.to_pandas_dataframe()
+total_observations = len(df)
+
+null_df = df.isnull().sum()
+
+new_run.log("Total Observations",total_observations)
+
+for columns in df.columns :
+    new_run.log(columns,null_df[columns])
 new_run.complete()
